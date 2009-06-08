@@ -15,8 +15,7 @@ class Foo with POEx::Role::TCPServer
 
     method handle_inbound_data($data, WheelID $id) is Event
     {
-        $self->clear_wheels;
-        $self->clear_socket_factory;
+        $self->yield('shutdown');
         $self->clear_sock;
 
         Test::More::pass("Got inbound data: $data");
