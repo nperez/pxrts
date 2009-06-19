@@ -146,10 +146,11 @@ handle_on_connect is the SuccessEvent of the SocketFactory instantiated in _star
     {
         my $wheel = POE::Wheel::ReadWrite->new
         (
-            Handle      => $socket,
-            Filter      => $self->filter->clone(),
-            InputEvent  => 'handle_inbound_data',
-            ErrorEvent  => 'handle_socket_error',
+            Handle          => $socket,
+            Filter          => $self->filter->clone(),
+            InputEvent      => 'handle_inbound_data',
+            ErrorEvent      => 'handle_socket_error',
+            FlushedEvent    => 'handle_on_flushed',
         );
         
         $self->set_wheel($wheel->ID, $wheel);
@@ -177,6 +178,17 @@ handle_socket_error is the ErrorEvent of each POE::Wheel::ReadWrite instantiated
     {
         warn "Received socket error: Action $action, Code $code, Message $message"
             if $self->options->{'debug'};
+    }
+
+=method handle_on_flushed(WheelID $id) is Event
+
+handle_on_flushed is the FlushedEvent of each POE::Wheel::ReadWrite instantiated.
+
+=cut
+
+    method handle_on_flushed(WheelID $id) is Event
+    {
+        1;
     }
 
 
