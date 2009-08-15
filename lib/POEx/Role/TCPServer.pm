@@ -4,8 +4,9 @@ package POEx::Role::TCPServer;
 
 use MooseX::Declare;
 
-role POEx::Role::TCPServer with POEx::Role::SessionInstantiation
+role POEx::Role::TCPServer 
 {
+    with 'POEx::Role::SessionInstantiation';
     use MooseX::AttributeHelpers;
     use POEx::Types(':all');
     use MooseX::Types::Structured('Dict', 'Tuple', 'Optional');

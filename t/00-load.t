@@ -1,10 +1,6 @@
-#!perl -T
+use Test::More;
 
-use Test::More tests => 1;
+use_ok( 'POEx::Role::TCPServer' );
 
-BEGIN {
-    use_ok( 'POEx::Role::TCPServer' );
-
-}
-
-diag( "Testing POEx::Role::TCPServer $POEx::Role::TCPServer::VERSION, Perl $], $^X" );
+done_testing();
+0;

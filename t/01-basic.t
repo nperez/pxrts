@@ -1,10 +1,9 @@
-use 5.010;
-use Test::More('tests', 1);
+use Test::More;
 
-use MooseX::Declare;
 use POE;
+use MooseX::Declare;
 
-class Foo with POEx::Role::TCPServer
+class Foo 
 {
     use MooseX::Types::Moose(':all');
     use POEx::Types(':all');
@@ -20,7 +19,9 @@ class Foo with POEx::Role::TCPServer
 
         Test::More::pass("Got inbound data: $data");
     }
-
+    
+    with 'POEx::Role::TCPServer';
+    
     after _start(@args) is Event
     {
         $self->post($self, 'client');
@@ -44,3 +45,5 @@ Foo->new
 
 POE::Kernel->run();
 
+done_testing();
+0;
