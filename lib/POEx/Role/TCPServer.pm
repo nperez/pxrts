@@ -56,7 +56,8 @@ for more details.
         get     => 'get_wheel',
         set     => 'set_wheel',
         delete  => 'delete_wheel',
-        count   => 'has_wheels',
+        count   => 'count_wheels',
+        exists  => 'has_wheel',
     }
 
 =cut
@@ -74,7 +75,8 @@ for more details.
             get     => 'get_wheel',
             set     => 'set_wheel',
             delete  => 'delete_wheel',
-            count   => 'has_wheels',
+            count   => 'count_wheels',
+            exists  => 'has_wheel',
         }
     );
 

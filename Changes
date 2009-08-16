@@ -1,4 +1,7 @@
 Revision history for {{ $dist->name }} {{ $dist->version }}
 
 {{ $NEXT }}
+        Adjust wheels accessors to include exists and rename count
+
+0.092280  2009-08-16 21:15:33 UTC
         Initial release
