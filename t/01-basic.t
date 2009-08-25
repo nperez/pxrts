@@ -3,6 +3,8 @@ use Test::More;
 use POE;
 use MooseX::Declare;
 
+my $port = int(rand(10000)) + 50000;
+
 class Foo 
 {
     use MooseX::Types::Moose(':all');
@@ -29,7 +31,7 @@ class Foo
 
     method client() is Event
     {
-        my $sock = IO::Socket::INET->new(PeerAddr => '127.0.0.1', PeerPort => '54444', Proto => 'tcp');
+        my $sock = IO::Socket::INET->new(PeerAddr => '127.0.0.1', PeerPort => $port, Proto => 'tcp');
         $self->sock($sock);
         $sock->print("TEST\n");
     }
@@ -38,9 +40,9 @@ class Foo
 Foo->new
 (
     listen_ip   => '127.0.0.1',
-    listen_port => '54444',
+    listen_port => $port,
     alias       => 'foo', 
-    options     => { trace => 1, debug => 1}
+    options     => { trace => 1, debug => 1 }
 );
 
 POE::Kernel->run();

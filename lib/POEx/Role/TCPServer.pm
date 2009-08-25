@@ -159,13 +159,13 @@ handle_on_connect is the SuccessEvent of the SocketFactory instantiated in _star
         $self->set_wheel($wheel->ID, $wheel);
     }
 
-=method handle_listen_error(Str $action, Int $code, Str $message) is Event
+=method handle_listen_error(Str $action, Int $code, Str $message, WheelID $id) is Event
 
 handle_listen_error is the FailureEvent of the SocketFactory
 
 =cut
 
-    method handle_listen_error(Str $action, Int $code, Str $message) is Event
+    method handle_listen_error(Str $action, Int $code, Str $message, WheelID $id) is Event
     {
         warn "Received listen error: Action $action, Code $code, Message $message"
             if $self->options->{'debug'};
