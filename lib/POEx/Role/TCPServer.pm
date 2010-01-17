@@ -1,4 +1,5 @@
-{package POEx::Role::TCPServer;}
+{package POEx::Role::TCPServer;
+}
 
 #ABSTRACT: A Moose Role that provides TCPServer behavior
 
