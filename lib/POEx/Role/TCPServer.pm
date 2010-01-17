@@ -1,4 +1,4 @@
-package POEx::Role::TCPServer;
+{package POEx::Role::TCPServer;}
 
 #ABSTRACT: A Moose Role that provides TCPServer behavior
 
@@ -7,7 +7,6 @@ use MooseX::Declare;
 role POEx::Role::TCPServer 
 {
     with 'POEx::Role::SessionInstantiation';
-    use MooseX::AttributeHelpers;
     use POEx::Types(':all');
     use MooseX::Types::Structured('Dict', 'Tuple', 'Optional');
     use MooseX::Types::Moose(':all');
@@ -44,39 +43,29 @@ The POE::Wheel::SocketFactory created in _start is stored here.
         clearer     => 'clear_socket_factory',
     );
 
-=attr wheels metaclass: Collection::Hash, is: rw, isa: HashRef, clearer: clear_wheels
+=attr wheels traits: ['Hash'], is: rw, isa: HashRef, clearer: clear_wheels
 
 When connections are accepted, a POE::Wheel::ReadWrite object is created and 
 stored in this attribute, keyed by WheelID. Wheels may be accessed via the
-following provided methods. See MooseX::AttributeHelpers::Collection::Hash
-for more details.
-
-    provides    =>
-    {
-        get     => 'get_wheel',
-        set     => 'set_wheel',
-        delete  => 'delete_wheel',
-        count   => 'count_wheels',
-        exists  => 'has_wheel',
-    }
+following provided methods.
 
 =cut
 
     has wheels =>
     (
-        metaclass   => 'MooseX::AttributeHelpers::Collection::Hash',
         is          => 'rw',
         isa         => HashRef,
+        traits      => ['Hash'],
         lazy        => 1,
         default     => sub { {} },
         clearer     => 'clear_wheels',
-        provides    =>
+        handles    =>
         {
-            get     => 'get_wheel',
-            set     => 'set_wheel',
-            delete  => 'delete_wheel',
-            count   => 'count_wheels',
-            exists  => 'has_wheel',
+            'get_wheel'     => 'get',
+            'set_wheel'     => 'set',
+            'delete_wheel'  => 'delete',
+            'count_wheels'  => 'count',
+            'has_wheel'     => 'exists',
         }
     );
 

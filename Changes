@@ -1,6 +1,9 @@
-Revision history for {{ $dist->name }} {{ $dist->version }}
+Revision history for POEx-Role-TCPServer: {{ $dist->version }}
 
 {{ $NEXT }}
+        Switch to native attribute traits
+
+0.092340  2009-08-22 19:06:34 UTC
         Adjust wheels accessors to include exists and rename count
 
 0.092280  2009-08-16 21:15:33 UTC
