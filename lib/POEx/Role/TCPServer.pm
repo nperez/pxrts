@@ -1,5 +1,4 @@
-{package POEx::Role::TCPServer;
-}
+package POEx::Role::TCPServer;
 
 #ABSTRACT: A Moose Role that provides TCPServer behavior
 
@@ -21,7 +20,9 @@ role POEx::Role::TCPServer
 
 =head2 METHODS
 
-=head3 handle_inbound_data($data, WheelID $id) is Event
+=head3 handle_inbound_data
+
+    ($data, WheelID $id) is Event
 
 This required method will be passed the data received, and from which wheel 
 it came. 
@@ -30,7 +31,9 @@ it came.
 
     requires 'handle_inbound_data';
 
-=attr socket_factory is: rw, isa: Object, predicate: has_socket_factory, clearer: clear_socket_factory
+=attribute_protected socket_factory
+
+    is: rw, isa: Object, predicate: has_socket_factory, clearer: clear_socket_factory
 
 The POE::Wheel::SocketFactory created in _start is stored here.
 
@@ -44,12 +47,21 @@ The POE::Wheel::SocketFactory created in _start is stored here.
         clearer     => 'clear_socket_factory',
     );
 
-=attr wheels traits: ['Hash'], is: rw, isa: HashRef, clearer: clear_wheels
+=attribute_protected wheels
+
+    traits: Hash, is: rw, isa: HashRef, clearer: clear_wheels
 
 When connections are accepted, a POE::Wheel::ReadWrite object is created and 
 stored in this attribute, keyed by WheelID. Wheels may be accessed via the
 following provided methods.
 
+    {
+        'get_wheel'     => 'get',
+        'set_wheel'     => 'set',
+        'delete_wheel'  => 'delete',
+        'count_wheels'  => 'count',
+        'has_wheel'     => 'exists',
+    }
 =cut
 
     has wheels =>
@@ -70,10 +82,12 @@ following provided methods.
         }
     );
 
-=attr filter is: rw, isa: Filter
+=attribute_protected filter
+
+    is: rw, isa: Filter
 
 This stores the filter that is used when constructing wheels. It will be cloned
-for each connection accepted.
+for each connection accepted. Defaults to a instance of POE::Filter::Line.
 
 =cut
 
@@ -84,7 +98,9 @@ for each connection accepted.
         default     => sub { POE::Filter::Line->new() }
     );
 
-=attr listen_ip is: ro, isa: Str, required
+=attribute_public listen_ip
+
+    is: ro, isa: Str, required
 
 This will be used as the BindAddress to SocketFactory
 
@@ -97,7 +113,9 @@ This will be used as the BindAddress to SocketFactory
         required    => 1,
     );
     
-=attr listen_port is: ro, isa: Int, required
+=attribute_public listen_port
+
+    is: ro, isa: Int, required
 
 This will be used as the BindPort to SocketFactory
 
@@ -110,7 +128,9 @@ This will be used as the BindPort to SocketFactory
         required    => 1,
     );
 
-=method after _start(@args) is Event
+=method_private after _start
+
+    (@args) is Event
 
 The _start event is after-advised to do the start up of the SocketFactory.
 
@@ -129,7 +149,9 @@ The _start event is after-advised to do the start up of the SocketFactory.
         $self->socket_factory($factory);
     }
 
-=method handle_on_connect(GlobRef $socket, Str $address, Int $port, WheelID $id) is Event
+=method_protected handle_on_connect
+
+    (GlobRef $socket, Str $address, Int $port, WheelID $id) is Event
 
 handle_on_connect is the SuccessEvent of the SocketFactory instantiated in _start. 
 
@@ -149,7 +171,9 @@ handle_on_connect is the SuccessEvent of the SocketFactory instantiated in _star
         $self->set_wheel($wheel->ID, $wheel);
     }
 
-=method handle_listen_error(Str $action, Int $code, Str $message, WheelID $id) is Event
+=method_protected handle_listen_error
+
+    (Str $action, Int $code, Str $message, WheelID $id) is Event
 
 handle_listen_error is the FailureEvent of the SocketFactory
 
@@ -161,7 +185,9 @@ handle_listen_error is the FailureEvent of the SocketFactory
             if $self->options->{'debug'};
     }
 
-=method handle_socket_error(Str $action, Int $code, Str $message, WheelID $id) is Event
+=method_protected handle_socket_error
+
+    (Str $action, Int $code, Str $message, WheelID $id) is Event
 
 handle_socket_error is the ErrorEvent of each POE::Wheel::ReadWrite instantiated.
 
@@ -173,7 +199,9 @@ handle_socket_error is the ErrorEvent of each POE::Wheel::ReadWrite instantiated
             if $self->options->{'debug'};
     }
 
-=method handle_on_flushed(WheelID $id) is Event
+=method_protected handle_on_flushed
+
+    (WheelID $id) is Event
 
 handle_on_flushed is the FlushedEvent of each POE::Wheel::ReadWrite instantiated.
 
@@ -185,7 +213,9 @@ handle_on_flushed is the FlushedEvent of each POE::Wheel::ReadWrite instantiated
     }
 
 
-=method shutdown() is Event
+=method_public shutdown()
+
+    is Event
 
 shutdown unequivically terminates the TCPServer by clearing all wheels and 
 aliases, forcing POE to garbage collect the session.

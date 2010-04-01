@@ -1,6 +1,9 @@
 Revision history for POEx-Role-TCPServer: {{ $dist->version }}
 
 {{ $NEXT }}
+        Revamp dist and docs to new Dist::Zilla awesomeness and fix bitrot
+
+0.100171  2010-01-17 14:41:36 America/Chicago
         Switch to native attribute traits
 
 0.092340  2009-08-22 19:06:34 UTC
