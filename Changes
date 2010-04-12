@@ -1,6 +1,7 @@
 Revision history for POEx-Role-TCPServer: {{ $dist->version }}
 
 {{ $NEXT }}
+        Add differentiation for input vs output filters
 
 1.100910  2010-04-01 02:10:32 America/Chicago
         Revamp dist and docs to new Dist::Zilla awesomeness and fix bitrot

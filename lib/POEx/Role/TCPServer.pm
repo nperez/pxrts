@@ -98,6 +98,37 @@ for each connection accepted. Defaults to a instance of POE::Filter::Line.
         default     => sub { POE::Filter::Line->new() }
     );
 
+
+=attribute_protected input_filter
+
+    is: rw, isa: Filter
+
+If different filters are needed for input and output, supply this attribute with the input filter. It will override what is in L</filter>
+
+=cut
+
+    has input_filter =>
+    (
+        is          => 'rw',
+        isa         => Filter,
+        predicate   => 'has_input_filter',
+    );
+
+=attribute_protected output_filter
+
+    is: rw, isa: Filter
+
+If different filters are needed for input and output, supply this attribute with the output filter. It will override what is in L</filter>
+
+=cut
+
+    has output_filter =>
+    (
+        is          => 'rw',
+        isa         => Filter,
+        predicate   => 'has_output_filter'
+    );
+
 =attribute_public listen_ip
 
     is: ro, isa: Str, required
@@ -159,10 +190,12 @@ handle_on_connect is the SuccessEvent of the SocketFactory instantiated in _star
 
     method handle_on_connect (GlobRef $socket, Str $address, Int $port, WheelID $id) is Event
     {
+        
         my $wheel = POE::Wheel::ReadWrite->new
         (
             Handle          => $socket,
-            Filter          => $self->filter->clone(),
+            InputFilter     => $self->has_input_filter ? $self->input_filter->clone() : $self->filter->clone(),
+            OutputFilter    => $self->has_output_filter ? $self->output_filter->clone() : $self->filter->clone(),
             InputEvent      => 'handle_inbound_data',
             ErrorEvent      => 'handle_socket_error',
             FlushedEvent    => 'handle_on_flushed',
