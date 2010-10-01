@@ -5,8 +5,7 @@ use MooseX::Declare;
 
 my $port = int(rand(10000)) + 50000;
 
-class Foo 
-{
+class Foo {
     use MooseX::Types::Moose(':all');
     use POEx::Types(':all');
     use IO::Socket::INET;
@@ -14,8 +13,7 @@ class Foo
 
     has sock => ( is => 'rw', isa => Object, clearer => 'clear_sock' );
 
-    method handle_inbound_data($data, WheelID $id) is Event
-    {
+    method handle_inbound_data($data, WheelID $id) is Event {
         $self->yield('shutdown');
         $self->clear_sock;
 
@@ -24,13 +22,11 @@ class Foo
     
     with 'POEx::Role::TCPServer';
     
-    after _start(@args) is Event
-    {
+    after _start(@args) is Event {
         $self->post($self, 'client');
     }
 
-    method client() is Event
-    {
+    method client() is Event {
         my $sock = IO::Socket::INET->new(PeerAddr => '127.0.0.1', PeerPort => $port, Proto => 'tcp');
         $self->sock($sock);
         $sock->print("TEST\n");

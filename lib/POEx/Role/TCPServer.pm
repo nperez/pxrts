@@ -4,8 +4,7 @@ package POEx::Role::TCPServer;
 
 use MooseX::Declare;
 
-role POEx::Role::TCPServer 
-{
+role POEx::Role::TCPServer {
     with 'POEx::Role::SessionInstantiation';
     use POEx::Types(':all');
     use MooseX::Types::Structured('Dict', 'Tuple', 'Optional');
@@ -167,8 +166,7 @@ The _start event is after-advised to do the start up of the SocketFactory.
 
 =cut
 
-    after _start(@args) is Event
-    {
+    after _start(@args) is Event {
         my $factory = POE::Wheel::SocketFactory->new
         (
             BindAddress     => $self->listen_ip,
@@ -188,8 +186,7 @@ handle_on_connect is the SuccessEvent of the SocketFactory instantiated in _star
 
 =cut
 
-    method handle_on_connect (GlobRef $socket, Str $address, Int $port, WheelID $id) is Event
-    {
+    method handle_on_connect (GlobRef $socket, Str $address, Int $port, WheelID $id) is Event {
         
         my $wheel = POE::Wheel::ReadWrite->new
         (
@@ -212,8 +209,7 @@ handle_listen_error is the FailureEvent of the SocketFactory
 
 =cut
 
-    method handle_listen_error(Str $action, Int $code, Str $message, WheelID $id) is Event
-    {
+    method handle_listen_error(Str $action, Int $code, Str $message, WheelID $id) is Event {
         warn "Received listen error: Action $action, Code $code, Message $message"
             if $self->options->{'debug'};
     }
@@ -226,8 +222,7 @@ handle_socket_error is the ErrorEvent of each POE::Wheel::ReadWrite instantiated
 
 =cut
 
-    method handle_socket_error(Str $action, Int $code, Str $message, WheelID $id) is Event
-    {
+    method handle_socket_error(Str $action, Int $code, Str $message, WheelID $id) is Event {
         warn "Received socket error: Action $action, Code $code, Message $message"
             if $self->options->{'debug'};
     }
@@ -240,8 +235,7 @@ handle_on_flushed is the FlushedEvent of each POE::Wheel::ReadWrite instantiated
 
 =cut
 
-    method handle_on_flushed(WheelID $id) is Event
-    {
+    method handle_on_flushed(WheelID $id) is Event {
         1;
     }
 
@@ -255,8 +249,7 @@ aliases, forcing POE to garbage collect the session.
 
 =cut
 
-    method shutdown() is Event
-    {
+    method shutdown() is Event {
         $self->clear_socket_factory;
         $self->clear_wheels;
         $self->clear_alias;
